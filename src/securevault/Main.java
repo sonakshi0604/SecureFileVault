@@ -2,6 +2,7 @@ package securevault;
 
 import securevault.model.User;
 import securevault.service.VaultManager;
+
 import java.util.Scanner;
 
 public class Main {
@@ -9,28 +10,33 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+
         VaultManager vaultManager = new VaultManager();
 
         System.out.println("=================================");
         System.out.println("       SECURE FILE VAULT");
         System.out.println("=================================");
 
-        boolean authenticated = false;
-        User loggedInUser = null;
+        boolean loggedIn = false;
+        String currentUser = "";
 
-        while (!authenticated) {
+        // ==============================
+        // LOGIN / REGISTRATION
+        // ==============================
 
-            System.out.println("\n===== START MENU =====");
-            System.out.println("1. Register");
+        while (!loggedIn) {
+
+            System.out.println("\n1. Register");
             System.out.println("2. Login");
             System.out.println("3. Exit");
-            System.out.print("Enter your choice: ");
+            System.out.print("Enter choice: ");
 
             String choice = scanner.nextLine();
 
             switch (choice) {
 
                 case "1":
+
                     System.out.print("Enter username: ");
                     String username = scanner.nextLine();
 
@@ -39,47 +45,57 @@ public class Main {
 
                     vaultManager.getAuthenticationService()
                             .register(username, password);
+
                     break;
 
                 case "2":
+
                     System.out.print("Enter username: ");
-                    String loginUsername = scanner.nextLine();
+                    username = scanner.nextLine();
 
                     System.out.print("Enter password: ");
-                    String loginPassword = scanner.nextLine();
+                    password = scanner.nextLine();
 
-                    loggedInUser = vaultManager
+                    User user = vaultManager
                             .getAuthenticationService()
-                            .login(loginUsername, loginPassword);
+                            .login(username, password);
 
-                    if (loggedInUser != null) {
-                        authenticated = true;
+                    if (user != null) {
+
+                        loggedIn = true;
+                        currentUser = user.getUsername();
+
                     }
+
                     break;
 
                 case "3":
+
                     System.out.println(
-                            "Exiting Secure File Vault..."
+                            "Exiting Secure File Vault."
                     );
+
                     scanner.close();
                     return;
 
                 default:
+
                     System.out.println(
-                            "Invalid choice. Please try again."
+                            "Invalid choice."
                     );
             }
         }
 
-        System.out.println(
-                "\nWelcome, " + loggedInUser.getUsername() + "!"
-        );
+        // ==============================
+        // MAIN VAULT MENU
+        // ==============================
 
-        boolean running = true;
+        while (loggedIn) {
 
-        while (running) {
+            System.out.println("\n=================================");
+            System.out.println("          VAULT MENU");
+            System.out.println("=================================");
 
-            System.out.println("\n===== MAIN MENU =====");
             System.out.println("1. Show Vault Status");
             System.out.println("2. List Files");
             System.out.println("3. Create File");
@@ -88,110 +104,169 @@ public class Main {
             System.out.println("6. Delete File");
             System.out.println("7. View Activity Logs");
             System.out.println("8. Exit");
-            System.out.print("Enter your choice: ");
+
+            System.out.print("Enter choice: ");
 
             String choice = scanner.nextLine();
 
             switch (choice) {
 
+                // ==============================
+                // SHOW VAULT STATUS
+                // ==============================
+
                 case "1":
+
                     vaultManager.showVaultStatus();
+
                     break;
+
+                // ==============================
+                // LIST FILES
+                // ==============================
 
                 case "2":
-                    vaultManager.getFileService()
+
+                    vaultManager
+                            .getFileService()
                             .listFiles();
+
                     break;
+
+                // ==============================
+                // CREATE FILE
+                // ==============================
 
                 case "3":
-                    System.out.print("Enter file name: ");
-                    String createName = scanner.nextLine();
 
-                    boolean fileCreated =
-                            vaultManager.getFileService()
-                                    .createFile(createName);
+                    System.out.print(
+                            "Enter file name: "
+                    );
 
-                    if (fileCreated) {
+                    String fileName = scanner.nextLine();
 
-                        vaultManager.getLoggingService()
-                                .logActivity(
-                                        loggedInUser.getUsername(),
-                                        "Created file: " + createName
-                                );
-                    }
+                    vaultManager
+                            .getFileService()
+                            .createFile(fileName);
+
                     break;
 
+                // ==============================
+                // ENCRYPT FILE
+                // ==============================
+
                 case "4":
+
                     System.out.print(
                             "Enter file name to encrypt: "
                     );
 
-                    String encryptName = scanner.nextLine();
+                    fileName = scanner.nextLine();
 
-                    vaultManager.getEncryptionService()
-                            .encryptFile(encryptName);
+                    boolean encrypted =
+                            vaultManager
+                                    .getEncryptionService()
+                                    .encryptFile(fileName);
 
-                    vaultManager.getLoggingService()
-                            .logActivity(
-                                    loggedInUser.getUsername(),
-                                    "Encrypted file: " + encryptName
-                            );
+                    if (encrypted) {
+
+                        vaultManager
+                                .getLoggingService()
+                                .logActivity(
+                                        currentUser,
+                                        "Encrypted file: "
+                                                + fileName
+                                );
+                    }
+
                     break;
 
+                // ==============================
+                // DECRYPT FILE
+                // ==============================
+
                 case "5":
+
                     System.out.print(
                             "Enter encrypted file name: "
                     );
 
-                    String decryptName = scanner.nextLine();
+                    fileName = scanner.nextLine();
 
-                    vaultManager.getEncryptionService()
-                            .decryptFile(decryptName);
+                    boolean decrypted =
+                            vaultManager
+                                    .getEncryptionService()
+                                    .decryptFile(fileName);
 
-                    vaultManager.getLoggingService()
-                            .logActivity(
-                                    loggedInUser.getUsername(),
-                                    "Decrypted file: " + decryptName
-                            );
+                    if (decrypted) {
+
+                        vaultManager
+                                .getLoggingService()
+                                .logActivity(
+                                        currentUser,
+                                        "Decrypted file: "
+                                                + fileName
+                                );
+                    }
+
                     break;
 
+                // ==============================
+                // DELETE FILE
+                // ==============================
+
                 case "6":
+
                     System.out.print(
                             "Enter file name to delete: "
                     );
 
-                    String deleteName = scanner.nextLine();
+                    fileName = scanner.nextLine();
 
-                    boolean fileDeleted =
-                            vaultManager.getFileService()
-                                    .deleteFile(deleteName);
+                    vaultManager
+                            .getFileService()
+                            .deleteFile(fileName);
 
-                    if (fileDeleted) {
+                    vaultManager
+                            .getLoggingService()
+                            .logActivity(
+                                    currentUser,
+                                    "Deleted file: "
+                                            + fileName
+                            );
 
-                        vaultManager.getLoggingService()
-                                .logActivity(
-                                        loggedInUser.getUsername(),
-                                        "Deleted file: " + deleteName
-                                );
-                    }
                     break;
+
+                // ==============================
+                // VIEW ACTIVITY LOGS
+                // ==============================
 
                 case "7":
-                    vaultManager.getLoggingService()
+
+                    vaultManager
+                            .getLoggingService()
                             .viewLogs();
+
                     break;
 
+                // ==============================
+                // EXIT
+                // ==============================
+
                 case "8":
-                    running = false;
 
                     System.out.println(
-                            "Exiting Secure File Vault..."
+                            "Thank you for using Secure File Vault."
                     );
+
+                    loggedIn = false;
+
                     break;
 
                 default:
+
                     System.out.println(
-                            "Invalid choice. Please try again."
+                            "Invalid choice."
                     );
             }
         }
