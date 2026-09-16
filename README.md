@@ -1,456 +1,351 @@
-\# Secure File Vault
+# Secure File Vault
 
+## 1. Project Overview
 
+Secure File Vault is a Java-based command-line application designed to securely manage files using authentication, encryption, decryption, file management, and activity logging.
 
-\## Overview
+The project demonstrates important concepts of Java programming, file handling, exception handling, object-oriented programming, and basic cryptographic security.
 
+---
 
+## 2. Problem Statement
 
-Secure File Vault is a Java-based command-line application designed to provide secure file management through user authentication, file encryption/decryption, file operations, and activity logging.
+Users often store important files without adequate protection. Unauthorized access, accidental exposure, and lack of activity tracking can create security risks.
 
+Secure File Vault provides a simple command-line solution where users can register, log in, create and manage files, encrypt sensitive files, decrypt them when required, and monitor file-related activities through logs.
 
+---
 
-The project demonstrates practical concepts of Java programming, file handling, authentication, cryptography, object-oriented programming, and basic security principles.
+## 3. Objectives
 
+* Provide authenticated access to the file vault.
+* Store passwords in hashed form.
+* Allow users to create, list, and delete files.
+* Provide encryption and decryption of files.
+* Maintain activity logs for important operations.
+* Demonstrate secure and modular Java programming.
+* Provide a simple and user-friendly command-line interface.
 
+---
 
-\## Features
+## 4. Features
 
+### Authentication
 
+* User registration
+* User login
+* Password validation
+* SHA-256 password hashing
 
-\* User registration and login
+### File Management
 
-\* Password hashing using SHA-256
+* Create files
+* List vault files
+* Delete files
+* Display vault status
 
-\* Secure file creation and deletion
+### File Security
 
-\* File listing and vault status monitoring
+* AES-GCM encryption
+* AES-GCM decryption
+* Random initialization vector (IV) for encryption
+* Validation of encrypted files
 
-\* AES-GCM file encryption
+### Activity Logging
 
-\* AES-GCM file decryption
+* Records important file operations
+* Stores logs in a file
+* Displays previous activity logs
 
-\* Random initialization vector (IV) generation for encryption
+---
 
-\* Activity logging with timestamps
+## 5. Functional Requirements
 
-\* Persistent user and activity data
+1. The system shall allow a new user to register.
+2. The system shall validate username and password input.
+3. The system shall authenticate registered users.
+4. The system shall allow users to create files.
+5. The system shall allow users to view files stored in the vault.
+6. The system shall encrypt selected files.
+7. The system shall decrypt encrypted files.
+8. The system shall allow users to delete files.
+9. The system shall record important activities.
+10. The system shall display activity logs.
 
-\* Input validation and error handling
+---
 
-\* Modular package-based architecture
+## 6. Non-Functional Requirements
 
+### Security
 
+Passwords are stored using SHA-256 hashing and files are protected using AES-GCM encryption.
 
-\## Technologies Used
+### Usability
 
+The application provides a simple menu-driven command-line interface.
 
+### Reliability
 
-\* \*\*Programming Language:\*\* Java
+The application validates inputs and handles file and encryption errors.
 
-\* \*\*Java Version:\*\* Java 26
+### Maintainability
 
-\* \*\*Cryptography:\*\* AES-GCM, SHA-256
+The project is divided into separate classes and packages according to their responsibilities.
 
-\* \*\*File Handling:\*\* Java I/O and NIO
+### Performance
 
-\* \*\*Data Storage:\*\* Local text files
+The application performs file operations directly through Java file-handling APIs.
 
-\* \*\*Version Control:\*\* Git and GitHub
+### Error Handling
 
-\* \*\*Interface:\*\* Command Line Interface (CLI)
+Invalid inputs, missing files, invalid encrypted files, and authentication failures are handled with appropriate messages.
 
+---
 
+## 7. Technologies Used
 
-\## Project Structure
+* Java
+* Java Cryptography Architecture (JCA)
+* AES-GCM
+* SHA-256
+* Java File I/O
+* Object-Oriented Programming
+* Git and GitHub
+* Command Line / PowerShell
 
+---
 
+## 8. Project Structure
 
 ```text
-
 SecureFileVault/
-
 │
-
 ├── src/
-
 │   └── securevault/
-
+│       ├── Main.java
+│       │
 │       ├── model/
-
-│       │   ├── ActivityLog.java
-
 │       │   ├── User.java
-
-│       │   └── VaultFile.java
-
+│       │   ├── VaultFile.java
+│       │   └── ActivityLog.java
 │       │
-
 │       ├── security/
-
 │       │   └── PasswordSecurity.java
-
 │       │
-
-│       ├── service/
-
-│       │   ├── AuthenticationService.java
-
-│       │   ├── EncryptionService.java
-
-│       │   ├── FileService.java
-
-│       │   ├── FileVaultService.java
-
-│       │   ├── LoggingService.java
-
-│       │   └── VaultManager.java
-
-│       │
-
-│       └── Main.java
-
+│       └── service/
+│           ├── AuthenticationService.java
+│           ├── EncryptionService.java
+│           ├── FileService.java
+│           ├── FileVaultService.java
+│           ├── LoggingService.java
+│           └── VaultManager.java
 │
-
 ├── data/
-
 ├── vault/
-
 ├── .gitignore
-
 └── README.md
-
 ```
 
+---
 
+## 9. Major Functional Modules
 
-\## Major Functional Modules
+### 1. Authentication Module
 
+Responsible for user registration, login, password validation, and password hashing.
 
+### 2. File Management Module
 
-\### 1. User Authentication
+Responsible for creating, listing, and deleting files in the vault.
 
+### 3. Encryption Module
 
+Uses AES-GCM to encrypt and decrypt files.
 
-Users can register and log in using a username and password.
+### 4. Logging Module
 
+Records important user activities and stores them in a log file.
 
+### 5. Vault Management Module
 
-Passwords are stored as SHA-256 hashes rather than plain text.
+Coordinates the different services and manages the overall vault workflow.
 
+---
 
-
-\### 2. File Management
-
-
-
-The system allows authenticated users to:
-
-
-
-\* Create files
-
-\* List vault files
-
-\* Delete files
-
-\* Check vault status
-
-
-
-\### 3. File Encryption and Decryption
-
-
-
-Files can be encrypted using AES-GCM.
-
-
-
-A randomly generated 12-byte IV is used for every encryption operation.
-
-
-
-Encrypted files are stored with the `.enc` extension.
-
-
-
-\### 4. Activity Logging
-
-
-
-Important vault activities are recorded with:
-
-
-
-\* Username
-
-\* Action performed
-
-\* Timestamp
-
-
-
-\### 5. Input Validation and Error Handling
-
-
-
-The application validates user input and handles common errors such as:
-
-
-
-\* Empty usernames
-
-\* Short passwords
-
-\* Duplicate usernames
-
-\* Missing files
-
-\* Invalid encrypted files
-
-\* Failed encryption/decryption operations
-
-
-
-\## Non-Functional Requirements
-
-
-
-\* \*\*Security:\*\* Password hashing and AES-GCM encryption are used to protect sensitive information.
-
-\* \*\*Usability:\*\* A simple menu-driven CLI makes the application easy to operate.
-
-\* \*\*Reliability:\*\* File existence checks and exception handling prevent common failures.
-
-\* \*\*Maintainability:\*\* The application is divided into models, security components, and service classes.
-
-\* \*\*Performance:\*\* Local file operations are used for efficient processing of small and medium-sized files.
-
-\* \*\*Error Handling:\*\* Invalid inputs and failed operations are handled without terminating the application unexpectedly.
-
-
-
-\## How to Run
-
-
-
-\### 1. Clone the repository
-
-
-
-```bash
-
-git clone https://github.com/sonakshi0604/SecureFileVault.git
-
-cd SecureFileVault
-
-```
-
-
-
-\### 2. Compile the Java source files
-
-
-
-For PowerShell:
-
-
-
-```powershell
-
-javac -d . (Get-ChildItem -Recurse -Filter \*.java src | ForEach-Object { $\_.FullName })
-
-```
-
-
-
-\### 3. Run the application
-
-
-
-```powershell
-
-java securevault.Main
-
-```
-
-
-
-\## Application Workflow
-
-
+## 10. Application Workflow
 
 ```text
-
 Start
-
-&#x20; |
-
-&#x20; v
-
+  |
+  v
 Register / Login
-
-&#x20; |
-
-&#x20; v
-
-Authentication
-
-&#x20; |
-
-&#x20; v
-
+  |
+  v
+Authentication Successful
+  |
+  v
 Vault Menu
-
-&#x20; |
-
-&#x20; +--> Show Vault Status
-
-&#x20; |
-
-&#x20; +--> List Files
-
-&#x20; |
-
-&#x20; +--> Create File
-
-&#x20; |
-
-&#x20; +--> Encrypt File
-
-&#x20; |
-
-&#x20; +--> Decrypt File
-
-&#x20; |
-
-&#x20; +--> Delete File
-
-&#x20; |
-
-&#x20; +--> View Activity Logs
-
-&#x20; |
-
-&#x20; v
-
+  |
+  +--> Show Vault Status
+  |
+  +--> List Files
+  |
+  +--> Create File
+  |
+  +--> Encrypt File
+  |
+  +--> Decrypt File
+  |
+  +--> Delete File
+  |
+  +--> View Activity Logs
+  |
+  v
 Exit
-
 ```
 
+---
 
+## 11. How to Run
 
-\## Testing
+### Prerequisites
 
+* Java Development Kit (JDK)
+* Git
 
+### Clone the Repository
 
-The application has been tested for the following operations:
+```text
+git clone https://github.com/sonakshi0604/SecureFileVault.git
+```
 
+### Navigate to the Project
 
+```text
+cd SecureFileVault
+```
 
-\* Successful user registration
+### Compile the Project
 
-\* Successful login
+PowerShell:
 
-\* File creation
+```text
+javac -d . (Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName })
+```
 
-\* File listing
+### Run the Application
 
-\* AES-GCM encryption
+```text
+java securevault.Main
+```
 
-\* AES-GCM decryption
+---
 
-\* Invalid file decryption
+## 12. Testing
 
-\* Activity log generation
+The following functionalities were tested successfully:
 
-\* Application exit
+* Java source compilation
+* User registration
+* User login
+* Invalid login handling
+* File creation
+* File listing
+* AES-GCM file encryption
+* AES-GCM file decryption
+* Invalid encrypted-file handling
+* Activity logging
+* Vault menu operations
 
-\* Java source compilation
+The application successfully completed the tested authentication, file management, encryption/decryption, and logging workflows.
 
+---
 
+## 13. Security Implementation
 
-\## Security Implementation
+### Password Security
 
+Passwords are not stored directly. The application uses SHA-256 hashing before storing password information.
 
+### File Encryption
 
-The project uses AES-GCM for authenticated encryption. Each encryption operation generates a new random initialization vector (IV), which is stored together with the encrypted data.
+Files are encrypted using:
 
+```text
+AES/GCM/NoPadding
+```
 
+A random 12-byte initialization vector (IV) is generated for each encryption operation.
 
-User passwords are converted into SHA-256 hashes before being stored.
+### Authentication
 
+Only successfully authenticated users can access the main vault menu.
 
+---
 
-> Note: This project is an academic implementation. Production systems should use stronger password-key derivation methods such as PBKDF2, Argon2, or bcrypt and should manage encryption keys using a secure key-management mechanism.
+## 14. Design Decisions
 
+* Java was selected because the project demonstrates object-oriented programming, file handling, exception handling, and security concepts.
+* A modular package structure was used to separate models, security functionality, and services.
+* AES-GCM was selected to provide authenticated encryption.
+* File-based storage was used to keep the project lightweight and easy to execute from the command line.
+* SHA-256 hashing was implemented for password storage in this academic project.
 
+---
 
-\## Learning Outcomes
+## 15. Challenges
 
+* Managing multiple Java classes and packages.
+* Handling file input/output operations.
+* Implementing encryption and decryption correctly.
+* Resolving encryption key length issues.
+* Handling invalid files and authentication errors.
+* Connecting and pushing the project to GitHub.
 
+---
 
-This project helped demonstrate practical implementation of:
+## 16. Learning Outcomes
 
+Through this project, the following concepts were practiced:
 
+* Java Object-Oriented Programming
+* Classes and objects
+* Packages
+* Java File I/O
+* Exception handling
+* Authentication
+* Password hashing
+* Symmetric encryption
+* AES-GCM
+* Activity logging
+* Modular software design
+* Git and GitHub
 
-\* Java Object-Oriented Programming
+---
 
-\* Java packages and modular design
+## 17. Future Enhancements
 
-\* File handling
+* Replace SHA-256 password hashing with a password-specific hashing algorithm such as PBKDF2.
+* Store encryption keys securely instead of using a hard-coded key.
+* Add role-based access control.
+* Add stronger file-name/path validation.
+* Add a graphical user interface.
+* Add database-based user and activity storage.
+* Add automated unit testing.
+* Improve key management and recovery mechanisms.
 
-\* Exception handling
+---
 
-\* Authentication
+## 18. Repository
 
-\* Password hashing
+GitHub Repository:
 
-\* Symmetric cryptography
+https://github.com/sonakshi0604/SecureFileVault
 
-\* AES-GCM encryption
+---
 
-\* Logging
+## 19. Author
 
-\* Git version control
-
-\* Software architecture and project documentation
-
-
-
-\## Future Enhancements
-
-
-
-\* Implement PBKDF2/Argon2 password hashing with salt
-
-\* Secure external key management
-
-\* Add file path validation
-
-\* Add role-based access control
-
-\* Add automated unit testing
-
-\* Add graphical user interface
-
-\* Add stronger file metadata management
-
-\* Add secure cloud storage integration
-
-
-
-\## Author
-
-
-
-\*\*Sonakshi Dashore\*\*
-
-
-
+**Sonakshi Dashore**
 B.Tech CSE – Cyber Security and Digital Forensics
-
 VIT Bhopal University
-
-
-
